@@ -44,28 +44,28 @@ public final class ProductsServiceGrpc {
   }
 
   private static volatile io.grpc.MethodDescriptor<com.gaboot.gabshop.grpc.general.Pagination,
-      com.gaboot.gabshop.grpc.product.Products> getFindPaginateMethod;
+      com.gaboot.gabshop.grpc.product.PagingProduct> getFindPaginateMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "FindPaginate",
       requestType = com.gaboot.gabshop.grpc.general.Pagination.class,
-      responseType = com.gaboot.gabshop.grpc.product.Products.class,
+      responseType = com.gaboot.gabshop.grpc.product.PagingProduct.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<com.gaboot.gabshop.grpc.general.Pagination,
-      com.gaboot.gabshop.grpc.product.Products> getFindPaginateMethod() {
-    io.grpc.MethodDescriptor<com.gaboot.gabshop.grpc.general.Pagination, com.gaboot.gabshop.grpc.product.Products> getFindPaginateMethod;
+      com.gaboot.gabshop.grpc.product.PagingProduct> getFindPaginateMethod() {
+    io.grpc.MethodDescriptor<com.gaboot.gabshop.grpc.general.Pagination, com.gaboot.gabshop.grpc.product.PagingProduct> getFindPaginateMethod;
     if ((getFindPaginateMethod = ProductsServiceGrpc.getFindPaginateMethod) == null) {
       synchronized (ProductsServiceGrpc.class) {
         if ((getFindPaginateMethod = ProductsServiceGrpc.getFindPaginateMethod) == null) {
           ProductsServiceGrpc.getFindPaginateMethod = getFindPaginateMethod =
-              io.grpc.MethodDescriptor.<com.gaboot.gabshop.grpc.general.Pagination, com.gaboot.gabshop.grpc.product.Products>newBuilder()
+              io.grpc.MethodDescriptor.<com.gaboot.gabshop.grpc.general.Pagination, com.gaboot.gabshop.grpc.product.PagingProduct>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "FindPaginate"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   com.gaboot.gabshop.grpc.general.Pagination.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.gaboot.gabshop.grpc.product.Products.getDefaultInstance()))
+                  com.gaboot.gabshop.grpc.product.PagingProduct.getDefaultInstance()))
               .setSchemaDescriptor(new ProductsServiceMethodDescriptorSupplier("FindPaginate"))
               .build();
         }
@@ -163,7 +163,7 @@ public final class ProductsServiceGrpc {
     /**
      */
     default void findPaginate(com.gaboot.gabshop.grpc.general.Pagination request,
-        io.grpc.stub.StreamObserver<com.gaboot.gabshop.grpc.product.Products> responseObserver) {
+        io.grpc.stub.StreamObserver<com.gaboot.gabshop.grpc.product.PagingProduct> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getFindPaginateMethod(), responseObserver);
     }
 
@@ -213,7 +213,7 @@ public final class ProductsServiceGrpc {
     /**
      */
     public void findPaginate(com.gaboot.gabshop.grpc.general.Pagination request,
-        io.grpc.stub.StreamObserver<com.gaboot.gabshop.grpc.product.Products> responseObserver) {
+        io.grpc.stub.StreamObserver<com.gaboot.gabshop.grpc.product.PagingProduct> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getFindPaginateMethod(), getCallOptions()), request, responseObserver);
     }
@@ -252,7 +252,7 @@ public final class ProductsServiceGrpc {
 
     /**
      */
-    public com.gaboot.gabshop.grpc.product.Products findPaginate(com.gaboot.gabshop.grpc.general.Pagination request) {
+    public com.gaboot.gabshop.grpc.product.PagingProduct findPaginate(com.gaboot.gabshop.grpc.general.Pagination request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getFindPaginateMethod(), getCallOptions(), request);
     }
@@ -291,7 +291,7 @@ public final class ProductsServiceGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<com.gaboot.gabshop.grpc.product.Products> findPaginate(
+    public com.google.common.util.concurrent.ListenableFuture<com.gaboot.gabshop.grpc.product.PagingProduct> findPaginate(
         com.gaboot.gabshop.grpc.general.Pagination request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getFindPaginateMethod(), getCallOptions()), request);
@@ -333,7 +333,7 @@ public final class ProductsServiceGrpc {
           break;
         case METHODID_FIND_PAGINATE:
           serviceImpl.findPaginate((com.gaboot.gabshop.grpc.general.Pagination) request,
-              (io.grpc.stub.StreamObserver<com.gaboot.gabshop.grpc.product.Products>) responseObserver);
+              (io.grpc.stub.StreamObserver<com.gaboot.gabshop.grpc.product.PagingProduct>) responseObserver);
           break;
         case METHODID_FIND_ONE:
           serviceImpl.findOne((com.google.protobuf.Int64Value) request,
@@ -369,7 +369,7 @@ public final class ProductsServiceGrpc {
           io.grpc.stub.ServerCalls.asyncUnaryCall(
             new MethodHandlers<
               com.gaboot.gabshop.grpc.general.Pagination,
-              com.gaboot.gabshop.grpc.product.Products>(
+              com.gaboot.gabshop.grpc.product.PagingProduct>(
                 service, METHODID_FIND_PAGINATE)))
         .addMethod(
           getFindOneMethod(),

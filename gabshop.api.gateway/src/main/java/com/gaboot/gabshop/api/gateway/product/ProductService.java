@@ -1,8 +1,11 @@
 package com.gaboot.gabshop.api.gateway.product;
 
+import com.gaboot.gabshop.api.gateway.common.dto.PaginationDto;
 import com.gaboot.gabshop.api.gateway.common.dto.ResponseDto;
 import com.gaboot.gabshop.api.gateway.common.services.MappingService;
 import com.gaboot.gabshop.api.gateway.product.dto.ProductDto;
+import com.gaboot.gabshop.grpc.general.Pagination;
+import com.gaboot.gabshop.grpc.product.PagingProduct;
 import com.gaboot.gabshop.grpc.product.Product;
 import com.gaboot.gabshop.grpc.product.ProductsServiceGrpc.ProductsServiceBlockingStub;
 import com.google.protobuf.Empty;
@@ -26,7 +29,7 @@ public class ProductService {
     private MappingService<ProductDto> mapServ;
 
     public ResponseDto<ProductDto> findAll(){
-        Empty request = Empty.newBuilder().build();
+        final Empty request = Empty.newBuilder().build();
         final List<ProductDto> result = productStub.findAll(request).getProductsList().stream().map(mapper::toDto).toList();
         final ResponseDto<ProductDto> respDto = new ResponseDto<>();
         mapServ.mapResponseSuccess(respDto, result, "");
@@ -34,10 +37,19 @@ public class ProductService {
     }
 
     public ResponseDto<ProductDto> findOne(long id) {
-        Int64Value request = Int64Value.newBuilder().setValue(id).build();
+        final Int64Value request = Int64Value.newBuilder().setValue(id).build();
         final ProductDto product = mapper.toDto(productStub.findOne(request));
         final ResponseDto<ProductDto> respDto = new ResponseDto<>();
         mapServ.mapResponseSuccess(respDto, product, "");
+        return respDto;
+    }
+
+    public ResponseDto<ProductDto> paginate(PaginationDto paging) {
+        final Pagination req = Pagination.newBuilder().setDataPerPage(paging.getDataPerPage()).setPage(paging.getPage()).build();
+        final PagingProduct pageProd = productStub.findPaginate(req);
+        final List<ProductDto> products = pageProd.getProductsList().stream().map(mapper::toDto).toList();
+        final ResponseDto<ProductDto> respDto = new ResponseDto<>();
+        mapServ.mapResponseSuccess(respDto, products, "", pageProd.getLastPage(), products.size());
         return respDto;
     }
 }

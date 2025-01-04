@@ -3,6 +3,7 @@ package com.gaboot.gabshop.product.product;
 // import org.springframework.grpc.server.service.GrpcService;
 
 import com.gaboot.gabshop.grpc.general.Pagination;
+import com.gaboot.gabshop.grpc.product.PagingProduct;
 import com.gaboot.gabshop.grpc.product.Product;
 import com.gaboot.gabshop.grpc.product.Products;
 // import com.gaboot.gabshop.grpc.product.ProductsServiceGrpc;
@@ -42,14 +43,15 @@ public class ProductService extends ProductsServiceImplBase {
     }
 
     @Override
-    public void findPaginate(Pagination request, StreamObserver<Products> responseObserver) {
+    public void findPaginate(Pagination request, StreamObserver<PagingProduct> responseObserver) {
         final int page = request.getPage()-1;
         final int pageSize = request.getDataPerPage();
         Page<ProductEntity> productPages = productRepo.findAll(PageRequest.of(page, pageSize));
         List<Product> grpcProducts = productPages.getContent().stream().map(prodMap::toGRPC).toList();
-        Products listGrpcProducts = Products.newBuilder().addAllProducts(grpcProducts).build();
+        PagingProduct paging = PagingProduct.newBuilder().addAllProducts(grpcProducts).setLastPage(productPages.getTotalPages()).build();
 
-        responseObserver.onNext(listGrpcProducts);
+        responseObserver.onNext(paging);
         responseObserver.onCompleted();
     }
+
 }

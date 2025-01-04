@@ -25,6 +25,11 @@ public final class ProductProto {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Products_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_PagingProduct_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_PagingProduct_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -42,13 +47,14 @@ public final class ProductProto {
       "\006 \001(\001\022\025\n\rdefault_image\030\007 \001(\t\022\033\n\023default_" +
       "image_thumb\030\010 \001(\t\022\022\n\ncreated_at\030\t \001(\003\022\022\n" +
       "\nupdated_at\030\n \001(\003\022\021\n\tis_active\030\013 \001(\010\"&\n\010" +
-      "Products\022\032\n\010products\030\001 \003(\0132\010.Product2\231\001\n" +
-      "\017ProductsService\022,\n\007FindAll\022\026.google.pro" +
-      "tobuf.Empty\032\t.Products\022&\n\014FindPaginate\022\013" +
-      ".Pagination\032\t.Products\0220\n\007FindOne\022\033.goog" +
-      "le.protobuf.Int64Value\032\010.ProductB1\n\037com." +
-      "gaboot.gabshop.grpc.productB\014ProductProt" +
-      "oP\001b\006proto3"
+      "Products\022\032\n\010products\030\001 \003(\0132\010.Product\">\n\r" +
+      "PagingProduct\022\021\n\tlast_page\030\001 \001(\005\022\032\n\010prod" +
+      "ucts\030\002 \003(\0132\010.Product2\236\001\n\017ProductsService" +
+      "\022,\n\007FindAll\022\026.google.protobuf.Empty\032\t.Pr" +
+      "oducts\022+\n\014FindPaginate\022\013.Pagination\032\016.Pa" +
+      "gingProduct\0220\n\007FindOne\022\033.google.protobuf" +
+      ".Int64Value\032\010.ProductB1\n\037com.gaboot.gabs" +
+      "hop.grpc.productB\014ProductProtoP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -69,6 +75,12 @@ public final class ProductProto {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Products_descriptor,
         new java.lang.String[] { "Products", });
+    internal_static_PagingProduct_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_PagingProduct_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_PagingProduct_descriptor,
+        new java.lang.String[] { "LastPage", "Products", });
     com.google.protobuf.EmptyProto.getDescriptor();
     com.google.protobuf.WrappersProto.getDescriptor();
     com.gaboot.gabshop.grpc.general.PaginationProto.getDescriptor();

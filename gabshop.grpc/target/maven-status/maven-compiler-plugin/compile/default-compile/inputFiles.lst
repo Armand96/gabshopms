@@ -3,6 +3,8 @@ G:\WEB\Java\gabshopms\gabshop.grpc\target\generated-sources\protobuf\grpc-java\c
 G:\WEB\Java\gabshopms\gabshop.grpc\target\generated-sources\protobuf\java\com\gaboot\gabshop\grpc\general\Pagination.java
 G:\WEB\Java\gabshopms\gabshop.grpc\target\generated-sources\protobuf\java\com\gaboot\gabshop\grpc\general\PaginationOrBuilder.java
 G:\WEB\Java\gabshopms\gabshop.grpc\target\generated-sources\protobuf\java\com\gaboot\gabshop\grpc\general\PaginationProto.java
+G:\WEB\Java\gabshopms\gabshop.grpc\target\generated-sources\protobuf\java\com\gaboot\gabshop\grpc\product\PagingProduct.java
+G:\WEB\Java\gabshopms\gabshop.grpc\target\generated-sources\protobuf\java\com\gaboot\gabshop\grpc\product\PagingProductOrBuilder.java
 G:\WEB\Java\gabshopms\gabshop.grpc\target\generated-sources\protobuf\java\com\gaboot\gabshop\grpc\product\Product.java
 G:\WEB\Java\gabshopms\gabshop.grpc\target\generated-sources\protobuf\java\com\gaboot\gabshop\grpc\product\ProductOrBuilder.java
 G:\WEB\Java\gabshopms\gabshop.grpc\target\generated-sources\protobuf\java\com\gaboot\gabshop\grpc\product\ProductProto.java

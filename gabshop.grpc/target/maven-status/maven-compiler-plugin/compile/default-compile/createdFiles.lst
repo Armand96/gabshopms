@@ -1,13 +1,16 @@
 com\gaboot\gabshop\grpc\product\ProductsServiceGrpc$ProductsServiceBaseDescriptorSupplier.class
 com\gaboot\gabshop\grpc\product\ProductsServiceGrpc$ProductsServiceFutureStub.class
+com\gaboot\gabshop\grpc\product\PagingProduct$Builder.class
 com\gaboot\gabshop\grpc\product\ProductProto.class
 com\gaboot\gabshop\grpc\product\ProductsServiceGrpc$ProductsServiceBlockingStub.class
 com\gaboot\gabshop\grpc\product\ProductsServiceGrpc$ProductsServiceMethodDescriptorSupplier.class
 com\gaboot\gabshop\grpc\product\Product$Builder.class
+com\gaboot\gabshop\grpc\product\PagingProduct$1.class
 com\gaboot\gabshop\grpc\product\ProductsServiceGrpc$2.class
 com\gaboot\gabshop\grpc\product\Products$1.class
 com\gaboot\gabshop\grpc\product\ProductsServiceGrpc$MethodHandlers.class
 com\gaboot\Main.class
+com\gaboot\gabshop\grpc\product\PagingProduct.class
 com\gaboot\gabshop\grpc\general\Pagination$Builder.class
 com\gaboot\gabshop\grpc\product\Products.class
 com\gaboot\gabshop\grpc\product\ProductsServiceGrpc$AsyncService.class
@@ -18,6 +21,7 @@ com\gaboot\gabshop\grpc\general\PaginationProto.class
 com\gaboot\gabshop\grpc\product\ProductOrBuilder.class
 com\gaboot\gabshop\grpc\product\ProductsServiceGrpc$ProductsServiceFileDescriptorSupplier.class
 com\gaboot\gabshop\grpc\general\Pagination.class
+com\gaboot\gabshop\grpc\product\PagingProductOrBuilder.class
 com\gaboot\gabshop\grpc\product\ProductsServiceGrpc$ProductsServiceImplBase.class
 com\gaboot\gabshop\grpc\general\PaginationOrBuilder.class
 com\gaboot\gabshop\grpc\general\Pagination$1.class
