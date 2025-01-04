@@ -11,6 +11,7 @@
     <modules>
         <module>gabshop.grpc</module>
         <module>gabshop.product</module>
+        <module>gabshop.api.gateway</module>
     </modules>
 
     <properties>
@@ -27,6 +28,11 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <basedir/>
+                    <buildDirectory/>
+                    <mainOutputDirectory/>
+                    <outputDirectory/>
+                    <projectArtifact/>
                 </configuration>
             </plugin>
             <plugin>
