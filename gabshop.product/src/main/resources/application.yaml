@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: GRPC Product
+  datasource:
+    url: jdbc:mysql://localhost:3306/grpc
+    username: root
+    password: developer
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+grpc:
+  server:
+    port: 9091

@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.gaboot.gabshop.grpc.product";
+option java_outer_classname = "ProductProto";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+import "general/pagination.proto";
+
+message Product {
+    int64 id = 1;
+    string name = 2;
+    string sku = 3;
+    string unit = 4;
+    double price = 5;
+    double stock = 6;
+    string default_image = 7;
+    string default_image_thumb = 8;
+    int64 created_at = 9;
+    int64 updated_at = 10;
+    bool is_active = 11;
+}
+
+message Products {
+    repeated Product products = 1;
+}
+
+service ProductsService {
+    rpc FindAll(google.protobuf.Empty) returns (Products);
+    rpc FindPaginate(Pagination) returns (Products);
+    rpc FindOne(google.protobuf.Int64Value) returns (Product);
+}

@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.gaboot.gabshop.grpc.general";
+option java_outer_classname = "PaginationProto";
+
+message Pagination {
+    int32 page = 1;
+    int32 data_per_page = 2;
+}
