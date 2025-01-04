@@ -26,8 +26,13 @@ message Products {
     repeated Product products = 1;
 }
 
+message PagingProduct {
+    int32 last_page = 1;
+    repeated Product products = 2;
+}
+
 service ProductsService {
     rpc FindAll(google.protobuf.Empty) returns (Products);
-    rpc FindPaginate(Pagination) returns (Products);
+    rpc FindPaginate(Pagination) returns (PagingProduct);
     rpc FindOne(google.protobuf.Int64Value) returns (Product);
 }
