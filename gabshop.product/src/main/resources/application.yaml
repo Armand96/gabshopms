@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/grpc
     username: root
-    password: developer
+    password: wingscorp
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true
