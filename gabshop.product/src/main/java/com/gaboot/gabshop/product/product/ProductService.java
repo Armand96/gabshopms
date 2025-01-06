@@ -3,11 +3,13 @@ package com.gaboot.gabshop.product.product;
 // import org.springframework.grpc.server.service.GrpcService;
 
 import com.gaboot.gabshop.grpc.general.Pagination;
+import com.gaboot.gabshop.grpc.product.CreateProduct;
 import com.gaboot.gabshop.grpc.product.PagingProduct;
 import com.gaboot.gabshop.grpc.product.Product;
 import com.gaboot.gabshop.grpc.product.Products;
 // import com.gaboot.gabshop.grpc.product.ProductsServiceGrpc;
 import com.gaboot.gabshop.grpc.product.ProductsServiceGrpc.ProductsServiceImplBase;
+import com.gaboot.gabshop.product.services.ImageService;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.io.IOException;
 import java.util.List;
 
 @GrpcService
@@ -26,6 +29,9 @@ public class ProductService extends ProductsServiceImplBase {
 
     @Autowired
     private ProductMapper prodMap;
+
+    @Autowired
+    private ImageService imgSvc;
 
     @Override
     public void findAll(Empty request, StreamObserver<Products> responseObserver) {
@@ -54,4 +60,22 @@ public class ProductService extends ProductsServiceImplBase {
         responseObserver.onCompleted();
     }
 
+    @Override
+    public void create(CreateProduct request, StreamObserver<Product> responseObserver) {
+        try {
+            final String defaultImagePath = imgSvc.saveFile(request.getImageContent(), request.getFileName(), "storage/products/img/");
+            final String defaultImageThumbPath = imgSvc.uploadImageThumb(request.getImageContent(), request.getFileName(), "storage/products/img/thumb/");
+
+            final ProductEntity productEntity = prodMap.toEntity(request);
+            productEntity.setDefaultImage(defaultImagePath);
+            productEntity.setDefaultImageThumb(defaultImageThumbPath);
+            productRepo.save(productEntity);
+
+            Product product = prodMap.toGRPC(productEntity);
+            responseObserver.onNext(product);
+            responseObserver.onCompleted();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

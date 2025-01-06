@@ -31,8 +31,21 @@ message PagingProduct {
     repeated Product products = 2;
 }
 
+message CreateProduct {
+    string name = 1;
+    string sku = 2;
+    string unit = 3;
+    double price = 4;
+    double stock = 5;
+    bool is_active = 6;
+    bytes image_content = 7;
+    string file_name = 8;
+    string file_type = 9;
+}
+
 service ProductsService {
     rpc FindAll(google.protobuf.Empty) returns (Products);
     rpc FindPaginate(Pagination) returns (PagingProduct);
     rpc FindOne(google.protobuf.Int64Value) returns (Product);
+    rpc Create(CreateProduct) returns (Product);
 }

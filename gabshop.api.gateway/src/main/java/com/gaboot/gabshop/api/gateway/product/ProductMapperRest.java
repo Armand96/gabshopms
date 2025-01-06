@@ -1,9 +1,14 @@
 package com.gaboot.gabshop.api.gateway.product;
 
+import com.gaboot.gabshop.api.gateway.product.dto.CreateProductDto;
 import com.gaboot.gabshop.api.gateway.product.dto.ProductDto;
+import com.gaboot.gabshop.grpc.product.CreateProduct;
 import com.gaboot.gabshop.grpc.product.Product;
+import com.google.protobuf.ByteString;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Date;
 
 @Component
@@ -38,5 +43,20 @@ public class ProductMapperRest {
                 .setUpdatedAt(dto.getUpdatedAt() != null ? dto.getUpdatedAt().getTime() : 0L) // Default to epoch 0
                 .setIsActive(dto.getIsActive() != null ? dto.getIsActive() : false) // Default to false
                 .build();
+    }
+
+    public CreateProduct toCreateProductGRPC(CreateProductDto createProduct, MultipartFile file) {
+        try {
+            return CreateProduct.newBuilder()
+                    .setImageContent(ByteString.copyFrom(file.getBytes()))
+                    .setName(createProduct.getName())
+                    .setSku(createProduct.getSku())
+                    .setUnit(createProduct.getUnit())
+                    .setStock(createProduct.getStock())
+                    .setIsActive(createProduct.getIsActive())
+                    .build();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

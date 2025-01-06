@@ -1,5 +1,6 @@
 package com.gaboot.gabshop.product.product;
 
+import com.gaboot.gabshop.grpc.product.CreateProduct;
 import com.gaboot.gabshop.grpc.product.Product;
 import org.springframework.stereotype.Component;
 
@@ -40,6 +41,20 @@ public class ProductMapper {
                 .setDefaultImageThumb(product.getDefaultImageThumb())
                 .setCreatedAt(new Date(product.getCreatedAt())) // Default to epoch 0
                 .setUpdatedAt(new Date(product.getUpdatedAt())) // Default to epoch 0
+                .setIsActive(product.getIsActive());
+    }
+
+    public ProductEntity toEntity(CreateProduct product) {
+        return new ProductEntity()
+                .setName(product.getName()) // Provide default empty string
+                .setSku(product.getSku())
+                .setUnit(product.getUnit())
+                .setPrice(product.getPrice()) // Default price to 0.0
+                .setStock(product.getStock()) // Default stock to 0
+                .setDefaultImage("")
+                .setDefaultImageThumb("")
+                .setCreatedAt(new Date()) // Default to epoch 0
+                .setUpdatedAt(new Date()) // Default to epoch 0
                 .setIsActive(product.getIsActive());
     }
 }
