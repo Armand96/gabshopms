@@ -5,11 +5,13 @@ import com.gaboot.gabshop.api.gateway.common.dto.ResponseDto;
 import com.gaboot.gabshop.api.gateway.common.services.MappingService;
 import com.gaboot.gabshop.api.gateway.product.dto.CreateProductDto;
 import com.gaboot.gabshop.api.gateway.product.dto.ProductDto;
+import com.gaboot.gabshop.api.gateway.product.dto.UpdateProductDto;
 import com.gaboot.gabshop.grpc.general.Pagination;
 import com.gaboot.gabshop.grpc.product.CreateProduct;
 import com.gaboot.gabshop.grpc.product.PagingProduct;
 import com.gaboot.gabshop.grpc.product.Product;
 import com.gaboot.gabshop.grpc.product.ProductsServiceGrpc.ProductsServiceBlockingStub;
+import com.gaboot.gabshop.grpc.product.UpdateProduct;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +61,14 @@ public class ProductService {
     public ResponseDto<ProductDto> create(CreateProductDto productDto, MultipartFile file) {
         final CreateProduct req = mapper.toCreateProductGRPC(productDto, file);
         final ProductDto product = mapper.toDto(productStub.create(req));
+        final ResponseDto<ProductDto> respDto = new ResponseDto<>();
+        mapServ.mapResponseSuccess(respDto, product, "");
+        return respDto;
+    }
+
+    public ResponseDto<ProductDto> update(UpdateProductDto productDto, MultipartFile file) {
+        final UpdateProduct req = mapper.toUpdateProductGRPC(productDto, file);
+        final ProductDto product = mapper.toDto(productStub.update(req));
         final ResponseDto<ProductDto> respDto = new ResponseDto<>();
         mapServ.mapResponseSuccess(respDto, product, "");
         return respDto;

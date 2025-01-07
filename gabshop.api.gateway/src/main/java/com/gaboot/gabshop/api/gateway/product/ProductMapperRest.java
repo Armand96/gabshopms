@@ -2,8 +2,10 @@ package com.gaboot.gabshop.api.gateway.product;
 
 import com.gaboot.gabshop.api.gateway.product.dto.CreateProductDto;
 import com.gaboot.gabshop.api.gateway.product.dto.ProductDto;
+import com.gaboot.gabshop.api.gateway.product.dto.UpdateProductDto;
 import com.gaboot.gabshop.grpc.product.CreateProduct;
 import com.gaboot.gabshop.grpc.product.Product;
+import com.gaboot.gabshop.grpc.product.UpdateProduct;
 import com.google.protobuf.ByteString;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,6 +49,8 @@ public class ProductMapperRest {
 
     public CreateProduct toCreateProductGRPC(CreateProductDto createProduct, MultipartFile file) {
         try {
+            String filename = file.getOriginalFilename();
+            assert filename != null;
             return CreateProduct.newBuilder()
                     .setImageContent(ByteString.copyFrom(file.getBytes()))
                     .setName(createProduct.getName())
@@ -55,6 +59,33 @@ public class ProductMapperRest {
                     .setUnit(createProduct.getUnit())
                     .setStock(createProduct.getStock())
                     .setIsActive(createProduct.getIsActive())
+                    .setFileName(createProduct.getName().replace(" ", "_").toLowerCase() + "." + filename.substring(filename.lastIndexOf(".") + 1))
+                    .setFileType(filename.substring(filename.lastIndexOf(".") + 1))
+                    .build();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public UpdateProduct toUpdateProductGRPC(UpdateProductDto updateProduct, MultipartFile file) {
+        try {
+            String filename = file.getOriginalFilename();
+            assert filename != null;
+            return UpdateProduct.newBuilder()
+                    .setProduct(
+                            CreateProduct.newBuilder()
+                                    .setImageContent(ByteString.copyFrom(file.getBytes()))
+                                    .setName(updateProduct.getName())
+                                    .setSku(updateProduct.getSku())
+                                    .setPrice(updateProduct.getPrice())
+                                    .setUnit(updateProduct.getUnit())
+                                    .setStock(updateProduct.getStock())
+                                    .setIsActive(updateProduct.getIsActive())
+                                    .setFileName(updateProduct.getName().replace(" ", "_").toLowerCase() + "." + filename.substring(filename.lastIndexOf(".") + 1))
+                                    .setFileType(filename.substring(filename.lastIndexOf(".") + 1))
+                                    .build()
+                    )
+                    .setId(updateProduct.getId())
                     .build();
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -4,6 +4,7 @@ import com.gaboot.gabshop.api.gateway.common.dto.PaginationDto;
 import com.gaboot.gabshop.api.gateway.common.dto.ResponseDto;
 import com.gaboot.gabshop.api.gateway.product.dto.CreateProductDto;
 import com.gaboot.gabshop.api.gateway.product.dto.ProductDto;
+import com.gaboot.gabshop.api.gateway.product.dto.UpdateProductDto;
 import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +41,13 @@ public class ProductController {
             @RequestPart("file") MultipartFile file
     ) {
         return ResponseEntity.ok(productService.create(productDto, file));
+    }
+
+    @PutMapping()
+    public ResponseEntity<ResponseDto<ProductDto>> update(
+            @RequestPart("product") UpdateProductDto productDto,
+            @RequestPart("file") MultipartFile file
+    ) {
+        return ResponseEntity.ok(productService.update(productDto, file));
     }
 }

@@ -36,7 +36,7 @@ public class ImageService extends FileService {
         String fileExtension = fileSplit[fileSplit.length-1]; // Default extension (can adjust based on use case)
 
         // Define the path to save the file
-        Path filePath = Paths.get(DIR + filename + "." + fileExtension);
+        Path filePath = Paths.get(DIR + filename);
         String imagePath = "";
 
         try {
