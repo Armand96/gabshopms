@@ -51,6 +51,7 @@ public class ProductMapperRest {
                     .setImageContent(ByteString.copyFrom(file.getBytes()))
                     .setName(createProduct.getName())
                     .setSku(createProduct.getSku())
+                    .setPrice(createProduct.getPrice())
                     .setUnit(createProduct.getUnit())
                     .setStock(createProduct.getStock())
                     .setIsActive(createProduct.getIsActive())

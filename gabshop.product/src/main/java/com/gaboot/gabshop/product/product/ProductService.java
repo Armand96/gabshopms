@@ -63,8 +63,12 @@ public class ProductService extends ProductsServiceImplBase {
     @Override
     public void create(CreateProduct request, StreamObserver<Product> responseObserver) {
         try {
-            final String defaultImagePath = imgSvc.saveFile(request.getImageContent(), request.getFileName(), "storage/products/img/");
-            final String defaultImageThumbPath = imgSvc.uploadImageThumb(request.getImageContent(), request.getFileName(), "storage/products/img/thumb/");
+            String defaultImagePath = "";
+            String defaultImageThumbPath = "";
+            if(!request.getImageContent().isEmpty()) {
+                defaultImagePath = imgSvc.saveFile(request.getImageContent(), request.getFileName(), "storage/products/img/");
+                defaultImageThumbPath = imgSvc.uploadImageThumb(request.getImageContent(), request.getFileName(), "storage/products/img/thumb/");
+            }
 
             final ProductEntity productEntity = prodMap.toEntity(request);
             productEntity.setDefaultImage(defaultImagePath);

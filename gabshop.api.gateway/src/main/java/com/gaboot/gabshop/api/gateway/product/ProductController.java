@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(path = "/products")
-@Validated
 public class ProductController {
 
     @Autowired
@@ -37,17 +36,9 @@ public class ProductController {
 
     @PostMapping()
     public ResponseEntity<ResponseDto<ProductDto>> create(
-            @Valid @RequestPart("product") CreateProductDto productDto,
+            @RequestPart("product") CreateProductDto productDto,
             @RequestPart("file") MultipartFile file
     ) {
-        if (file.isEmpty()) {
-            try {
-                throw new BadRequestException("Please select a file to upload.");
-            } catch (BadRequestException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
         return ResponseEntity.ok(productService.create(productDto, file));
     }
 }
