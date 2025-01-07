@@ -3,10 +3,7 @@ package com.gaboot.gabshop.product.product;
 // import org.springframework.grpc.server.service.GrpcService;
 
 import com.gaboot.gabshop.grpc.general.Pagination;
-import com.gaboot.gabshop.grpc.product.CreateProduct;
-import com.gaboot.gabshop.grpc.product.PagingProduct;
-import com.gaboot.gabshop.grpc.product.Product;
-import com.gaboot.gabshop.grpc.product.Products;
+import com.gaboot.gabshop.grpc.product.*;
 // import com.gaboot.gabshop.grpc.product.ProductsServiceGrpc;
 import com.gaboot.gabshop.grpc.product.ProductsServiceGrpc.ProductsServiceImplBase;
 import com.gaboot.gabshop.product.services.ImageService;
@@ -73,6 +70,33 @@ public class ProductService extends ProductsServiceImplBase {
             final ProductEntity productEntity = prodMap.toEntity(request);
             productEntity.setDefaultImage(defaultImagePath);
             productEntity.setDefaultImageThumb(defaultImageThumbPath);
+            productRepo.save(productEntity);
+
+            Product product = prodMap.toGRPC(productEntity);
+            responseObserver.onNext(product);
+            responseObserver.onCompleted();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void update(UpdateProduct request, StreamObserver<Product> responseObserver) {
+        try {
+            String defaultImagePath = "";
+            String defaultImageThumbPath = "";
+            if(!request.getProduct().getImageContent().isEmpty()) {
+                defaultImagePath = imgSvc.saveFile(request.getProduct().getImageContent(), request.getProduct().getFileName(), "storage/products/img/");
+                defaultImageThumbPath = imgSvc.uploadImageThumb(request.getProduct().getImageContent(), request.getProduct().getFileName(), "storage/products/img/thumb/");
+            }
+
+            ProductEntity productEntity = productRepo.findById(request.getId()).orElseThrow(() -> new RuntimeException("Product not found"));
+            productEntity = prodMap.toEntity(request.getProduct());
+            productEntity.setId(request.getId());
+            if(!defaultImagePath.isEmpty() || !defaultImageThumbPath.isEmpty()) {
+                productEntity.setDefaultImage(defaultImagePath);
+                productEntity.setDefaultImageThumb(defaultImageThumbPath);
+            }
             productRepo.save(productEntity);
 
             Product product = prodMap.toGRPC(productEntity);

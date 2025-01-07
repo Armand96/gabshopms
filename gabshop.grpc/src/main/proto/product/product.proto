@@ -43,9 +43,15 @@ message CreateProduct {
     string file_type = 9;
 }
 
+message UpdateProduct {
+    int64 id = 1;
+    CreateProduct product = 2;
+}
+
 service ProductsService {
     rpc FindAll(google.protobuf.Empty) returns (Products);
     rpc FindPaginate(Pagination) returns (PagingProduct);
     rpc FindOne(google.protobuf.Int64Value) returns (Product);
     rpc Create(CreateProduct) returns (Product);
+    rpc Update(UpdateProduct) returns (Product);
 }
