@@ -3,6 +3,7 @@ package com.gaboot.gabshop.api.gateway.product;
 import com.gaboot.gabshop.api.gateway.common.dto.PaginationDto;
 import com.gaboot.gabshop.api.gateway.common.dto.ResponseDto;
 import com.gaboot.gabshop.api.gateway.product.dto.CreateProductDto;
+import com.gaboot.gabshop.api.gateway.product.dto.FilterProductDto;
 import com.gaboot.gabshop.api.gateway.product.dto.ProductDto;
 import com.gaboot.gabshop.api.gateway.product.dto.UpdateProductDto;
 import jakarta.validation.Valid;
@@ -31,8 +32,8 @@ public class ProductController {
     }
 
     @GetMapping("/paging")
-    public ResponseEntity<ResponseDto<ProductDto>> paginate(@ModelAttribute PaginationDto paging) {
-        return ResponseEntity.ok(productService.paginate(paging));
+    public ResponseEntity<ResponseDto<ProductDto>> paginate(@ModelAttribute FilterProductDto filter) {
+        return ResponseEntity.ok(productService.paginate(filter));
     }
 
     @PostMapping()

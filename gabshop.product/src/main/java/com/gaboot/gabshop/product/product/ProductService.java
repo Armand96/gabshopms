@@ -14,6 +14,7 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,6 +30,9 @@ public class ProductService extends ProductsServiceImplBase {
 
     @Autowired
     private ImageService imgSvc;
+
+    @Autowired
+    private ProductSpec productSpec;
 
     @Override
     public void findAll(Empty request, StreamObserver<Products> responseObserver) {
@@ -46,10 +50,15 @@ public class ProductService extends ProductsServiceImplBase {
     }
 
     @Override
-    public void findPaginate(Pagination request, StreamObserver<PagingProduct> responseObserver) {
-        final int page = request.getPage()-1;
-        final int pageSize = request.getDataPerPage();
-        Page<ProductEntity> productPages = productRepo.findAll(PageRequest.of(page, pageSize));
+    public void findPaginate(FilterProduct request, StreamObserver<PagingProduct> responseObserver) {
+        final int page = request.getPaging().getPage()-1;
+        final int pageSize = request.getPaging().getDataPerPage();
+
+        final String name = request.getName();
+        final String sku = request.getSku();
+
+        Specification<ProductEntity> spec = productSpec.filterByNameAndSku(name, sku);
+        Page<ProductEntity> productPages = productRepo.findAll(spec, PageRequest.of(page, pageSize));
         List<Product> grpcProducts = productPages.getContent().stream().map(prodMap::toGRPC).toList();
         PagingProduct paging = PagingProduct.newBuilder().addAllProducts(grpcProducts).setLastPage(productPages.getTotalPages()).build();
 

@@ -31,6 +31,12 @@ message PagingProduct {
     repeated Product products = 2;
 }
 
+message FilterProduct {
+    string name = 1;
+    string sku = 2;
+    Pagination paging = 3;
+}
+
 message CreateProduct {
     string name = 1;
     string sku = 2;
@@ -50,7 +56,7 @@ message UpdateProduct {
 
 service ProductsService {
     rpc FindAll(google.protobuf.Empty) returns (Products);
-    rpc FindPaginate(Pagination) returns (PagingProduct);
+    rpc FindPaginate(FilterProduct) returns (PagingProduct);
     rpc FindOne(google.protobuf.Int64Value) returns (Product);
     rpc Create(CreateProduct) returns (Product);
     rpc Update(UpdateProduct) returns (Product);

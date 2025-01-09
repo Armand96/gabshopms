@@ -1,15 +1,15 @@
 package com.gaboot.gabshop.api.gateway.product;
 
-import com.gaboot.gabshop.api.gateway.common.dto.PaginationDto;
 import com.gaboot.gabshop.api.gateway.common.dto.ResponseDto;
 import com.gaboot.gabshop.api.gateway.common.services.MappingService;
 import com.gaboot.gabshop.api.gateway.product.dto.CreateProductDto;
+import com.gaboot.gabshop.api.gateway.product.dto.FilterProductDto;
 import com.gaboot.gabshop.api.gateway.product.dto.ProductDto;
 import com.gaboot.gabshop.api.gateway.product.dto.UpdateProductDto;
 import com.gaboot.gabshop.grpc.general.Pagination;
 import com.gaboot.gabshop.grpc.product.CreateProduct;
+import com.gaboot.gabshop.grpc.product.FilterProduct;
 import com.gaboot.gabshop.grpc.product.PagingProduct;
-import com.gaboot.gabshop.grpc.product.Product;
 import com.gaboot.gabshop.grpc.product.ProductsServiceGrpc.ProductsServiceBlockingStub;
 import com.gaboot.gabshop.grpc.product.UpdateProduct;
 import com.google.protobuf.Empty;
@@ -49,8 +49,13 @@ public class ProductService {
         return respDto;
     }
 
-    public ResponseDto<ProductDto> paginate(PaginationDto paging) {
-        final Pagination req = Pagination.newBuilder().setDataPerPage(paging.getDataPerPage()).setPage(paging.getPage()).build();
+    public ResponseDto<ProductDto> paginate(FilterProductDto filter) {
+        final FilterProduct req = FilterProduct.newBuilder()
+                .setPaging(
+                        Pagination.newBuilder()
+                                .setDataPerPage(filter.getDataPerPage())
+                                .setPage(filter.getPage()).build()
+                ).setName(filter.getName()).setSku(filter.getSku()).build();
         final PagingProduct pageProd = productStub.findPaginate(req);
         final List<ProductDto> products = pageProd.getProductsList().stream().map(mapper::toDto).toList();
         final ResponseDto<ProductDto> respDto = new ResponseDto<>();
