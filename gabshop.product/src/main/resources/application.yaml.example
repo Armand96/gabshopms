@@ -1,4 +1,10 @@
 spring:
+  native:
+    remove-yaml-support: true
+  main:
+    lazy-initialization: true
+  aot:
+    enabled: true
   application:
     name: GRPC Product
   datasource:

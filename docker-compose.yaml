@@ -1,0 +1,34 @@
+services:
+  product:
+    image: gabshop:product
+    build:
+      context: ./gabshop.product
+      dockerfile: Dockerfile
+    networks:
+      - gabshop-network
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 5s
+      restart_policy:
+        condition: on-failure
+  api.gateway:
+    image: gabshop:api.gateway
+    build:
+      context: ./gabshop.api.gateway
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    networks:
+      - gabshop-network
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 5s
+      restart_policy:
+        condition: on-failure
+networks:
+  gabshop-network:
+    driver: bridge
