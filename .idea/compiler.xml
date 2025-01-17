@@ -8,13 +8,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="gabshop.grpc" />
+        <module name="gabshop.files" />
       </profile>
       <profile name="Annotation profile for gabshop" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
         <module name="gabshop.api.gateway" />
@@ -28,6 +28,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="gabshop.api.gateway" options="-parameters" />
+      <module name="gabshop.files" options="" />
       <module name="gabshop.grpc" options="-parameters" />
       <module name="gabshop.product" options="-parameters" />
     </option>

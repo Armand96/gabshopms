@@ -2,16 +2,22 @@ package com.gaboot.gabshop.product.product;
 
 // import org.springframework.grpc.server.service.GrpcService;
 
-import com.gaboot.gabshop.grpc.general.Pagination;
+// import com.gaboot.gabshop.grpc.general.Pagination;
 import com.gaboot.gabshop.grpc.product.*;
 // import com.gaboot.gabshop.grpc.product.ProductsServiceGrpc;
 import com.gaboot.gabshop.grpc.product.ProductsServiceGrpc.ProductsServiceImplBase;
-import com.gaboot.gabshop.product.services.ImageService;
+// import com.gaboot.gabshop.product.services.ImageService;
+// import com.gaboot.gabshop.product.services.ImageService;
+import com.gaboot.services.files.FileServiceFactory;
+import com.gaboot.services.images.ImageService;
+// import com.gaboot.services.files.MinIoFileService;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
+// import jakarta.annotation.PostConstruct;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,11 +34,35 @@ public class ProductService extends ProductsServiceImplBase {
     @Autowired
     private ProductMapper prodMap;
 
-    @Autowired
-    private ImageService imgSvc;
+    @Value("${bucket.url}")
+    private String bucketUrl;
+
+    @Value("${bucket.key}")
+    private String bucketKey;
+
+    @Value("${bucket.user}")
+    private String bucketUser;
+
+    @Value("${bucket.name}")
+    private String bucketName;
 
     @Autowired
     private ProductSpec productSpec;
+
+    private ImageService imgSvc; // Let Spring inject ImageService
+
+    @Autowired
+    public ProductService(ProductRepo productRepo, ProductMapper prodMap, ProductSpec productSpec) {
+        this.productRepo = productRepo;
+        this.prodMap = prodMap;
+        this.productSpec = productSpec;
+
+        // Manually initialize ImageService in the constructor with the injected values
+        this.imgSvc = new ImageService(
+                new FileServiceFactory(bucketUrl, bucketUser, bucketKey, bucketName)
+                        .getFileService("minio")
+        );
+    }
 
     @Override
     public void findAll(Empty request, StreamObserver<Products> responseObserver) {
@@ -72,8 +102,8 @@ public class ProductService extends ProductsServiceImplBase {
             String defaultImagePath = "";
             String defaultImageThumbPath = "";
             if(!request.getImageContent().isEmpty()) {
-                defaultImagePath = imgSvc.saveFile(request.getImageContent(), request.getFileName(), "storage/products/img/");
-                defaultImageThumbPath = imgSvc.uploadImageThumb(request.getImageContent(), request.getFileName(), "storage/products/img/thumb/");
+                defaultImagePath = imgSvc.saveImage(request.getImageContent(), request.getFileName(), "products/img/");
+                defaultImageThumbPath = imgSvc.uploadImageThumb(request.getImageContent(), request.getFileName(), "products/img/thumb/");
             }
 
             final ProductEntity productEntity = prodMap.toEntity(request);
@@ -95,8 +125,8 @@ public class ProductService extends ProductsServiceImplBase {
             String defaultImagePath = "";
             String defaultImageThumbPath = "";
             if(!request.getProduct().getImageContent().isEmpty()) {
-                defaultImagePath = imgSvc.saveFile(request.getProduct().getImageContent(), request.getProduct().getFileName(), "storage/products/img/");
-                defaultImageThumbPath = imgSvc.uploadImageThumb(request.getProduct().getImageContent(), request.getProduct().getFileName(), "storage/products/img/thumb/");
+                defaultImagePath = imgSvc.saveImage(request.getProduct().getImageContent(), request.getProduct().getFileName(), "products/img/");
+                defaultImageThumbPath = imgSvc.uploadImageThumb(request.getProduct().getImageContent(), request.getProduct().getFileName(), "products/img/thumb/");
             }
 
             ProductEntity productEntity = productRepo.findById(request.getId()).orElseThrow(() -> new RuntimeException("Product not found"));

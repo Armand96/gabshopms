@@ -12,6 +12,7 @@
         <module>gabshop.grpc</module>
         <module>gabshop.product</module>
         <module>gabshop.api.gateway</module>
+        <module>gabshop.files</module>
     </modules>
 
     <properties>

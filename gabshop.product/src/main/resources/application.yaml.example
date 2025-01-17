@@ -20,3 +20,9 @@ spring:
 grpc:
   server:
     port: 9091
+
+bucket:
+  url: http://127.0.0.1:9000
+  user: minioadmin
+  key: minioadmin
+  name: gabshop
