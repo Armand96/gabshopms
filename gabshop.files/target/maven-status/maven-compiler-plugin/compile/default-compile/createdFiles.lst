@@ -1,0 +1,5 @@
+com\gaboot\services\images\ImageService.class
+com\gaboot\services\files\FileService.class
+com\gaboot\services\files\FileServiceFactory.class
+com\gaboot\services\files\FileInterface.class
+com\gaboot\services\files\MinIoFileService.class
