@@ -20,16 +20,17 @@ public class FileService implements FileInterface {
     @Override
     public String saveFile(byte[] fileBytes, String fileName, String directory) throws IOException {
         // Create the directory if it doesn't exist
+        directory = "storage/" + directory;
         Path dirPath = Paths.get(directory);
         if (!Files.exists(dirPath)) {
             Files.createDirectories(dirPath);
         }
 
-        System.out.println("Dir Path:"+dirPath.toString());
-        System.out.println("File name:"+fileName);
+        // System.out.println("Dir Path:"+dirPath.toString());
+        // System.out.println("File name:"+fileName);
         // Create the file path
         Path filePath = dirPath.resolve(fileName);
-        System.out.println("File Path: "+filePath.toString());
+        // System.out.println("File Path: "+filePath.toString());
 
         // Write the byte array to the file
         Files.write(filePath, fileBytes);

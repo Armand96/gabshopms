@@ -47,6 +47,9 @@ public class ProductService extends ProductsServiceImplBase {
     @Value("${bucket.name}")
     private String bucketName;
 
+    @Value("${bucket.type")
+    private String bucketType;
+
     @Autowired
     private ProductSpec productSpec;
 
@@ -56,7 +59,7 @@ public class ProductService extends ProductsServiceImplBase {
     private void init() {
         this.imgSvc = new ImageService(
                 new FileServiceFactory(bucketUrl, bucketUser, bucketKey, bucketName)
-                        .getFileService("minio")
+                        .getFileService(bucketType)
         );
     }
 

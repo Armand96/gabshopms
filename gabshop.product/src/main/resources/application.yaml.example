@@ -26,3 +26,4 @@ bucket:
   user: minioadmin
   key: minioadmin
   name: gabshop
+  type: minio #change to 'local' if you don't want to use minio
