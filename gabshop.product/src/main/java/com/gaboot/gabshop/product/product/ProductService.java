@@ -15,6 +15,7 @@ import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
 // import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,17 +52,19 @@ public class ProductService extends ProductsServiceImplBase {
 
     private ImageService imgSvc; // Let Spring inject ImageService
 
+    @PostConstruct
+    private void init() {
+        this.imgSvc = new ImageService(
+                new FileServiceFactory(bucketUrl, bucketUser, bucketKey, bucketName)
+                        .getFileService("minio")
+        );
+    }
+
     @Autowired
     public ProductService(ProductRepo productRepo, ProductMapper prodMap, ProductSpec productSpec) {
         this.productRepo = productRepo;
         this.prodMap = prodMap;
         this.productSpec = productSpec;
-
-        // Manually initialize ImageService in the constructor with the injected values
-        this.imgSvc = new ImageService(
-                new FileServiceFactory(bucketUrl, bucketUser, bucketKey, bucketName)
-                        .getFileService("minio")
-        );
     }
 
     @Override
@@ -103,7 +106,9 @@ public class ProductService extends ProductsServiceImplBase {
             String defaultImageThumbPath = "";
             if(!request.getImageContent().isEmpty()) {
                 defaultImagePath = imgSvc.saveImage(request.getImageContent(), request.getFileName(), "products/img/");
+                System.out.println("IMAGE: "+defaultImagePath);
                 defaultImageThumbPath = imgSvc.uploadImageThumb(request.getImageContent(), request.getFileName(), "products/img/thumb/");
+                System.out.println(defaultImageThumbPath);
             }
 
             final ProductEntity productEntity = prodMap.toEntity(request);

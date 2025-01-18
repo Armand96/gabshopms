@@ -50,7 +50,7 @@ public class ImageService  {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(resizedImage, fileExtension, baos);
             ByteString byteString = ByteString.copyFrom(baos.toByteArray());
-            saveImage(byteString, fileExtension, filePath.toString());
+            saveImage(byteString, filename, filePath.toString());
 
             imagePath = DIR + filePath.getFileName();
         } catch (IOException e) {
