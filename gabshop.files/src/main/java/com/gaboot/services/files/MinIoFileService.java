@@ -45,16 +45,17 @@ public class MinIoFileService implements FileInterface {
     public String saveFile(byte[] fileBytes, String fileName, String directory) throws IOException {
         try (InputStream inputStream = new ByteArrayInputStream(fileBytes)) {
             // Upload the file to MinIO
-            directory = directory.endsWith("/") ? directory : directory + "/";
+            directory = !directory.endsWith("/") ? directory : directory.substring(0, directory.length() - 1);
+            // System.out.println("directory: "+directory);
             minioClient.putObject(PutObjectArgs.builder()
                     .bucket(bucketName)
-                    .object(directory + fileName)
+                    .object(directory + "/" + fileName)
                     .stream(inputStream, fileBytes.length, -1)
                     .contentType(Files.probeContentType(Paths.get(fileName)))
                     .build());
 
             // Return the file URL
-            return String.format("%s/%s/%s", urlEndpoint, bucketName, fileName);
+            return String.format("%s/%s/%s/%s", urlEndpoint, bucketName, directory, fileName);
         } catch (MinioException e) {
             throw new IOException("Failed to upload file to MinIO", e);
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {

@@ -106,9 +106,7 @@ public class ProductService extends ProductsServiceImplBase {
             String defaultImageThumbPath = "";
             if(!request.getImageContent().isEmpty()) {
                 defaultImagePath = imgSvc.saveImage(request.getImageContent(), request.getFileName(), "products/img/");
-                System.out.println("IMAGE: "+defaultImagePath);
                 defaultImageThumbPath = imgSvc.uploadImageThumb(request.getImageContent(), request.getFileName(), "products/img/thumb/");
-                System.out.println(defaultImageThumbPath);
             }
 
             final ProductEntity productEntity = prodMap.toEntity(request);
