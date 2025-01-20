@@ -47,7 +47,7 @@ public class ProductService extends ProductsServiceImplBase {
     @Value("${bucket.name}")
     private String bucketName;
 
-    @Value("${bucket.type")
+    @Value("${bucket.type}")
     private String bucketType;
 
     @Autowired
