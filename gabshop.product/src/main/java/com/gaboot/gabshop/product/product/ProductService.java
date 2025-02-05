@@ -3,6 +3,7 @@ package com.gaboot.gabshop.product.product;
 // import org.springframework.grpc.server.service.GrpcService;
 
 // import com.gaboot.gabshop.grpc.general.Pagination;
+import com.gaboot.exception.GrpcResourceNotFoundException;
 import com.gaboot.gabshop.grpc.product.*;
 // import com.gaboot.gabshop.grpc.product.ProductsServiceGrpc;
 import com.gaboot.gabshop.grpc.product.ProductsServiceGrpc.ProductsServiceImplBase;
@@ -13,6 +14,7 @@ import com.gaboot.services.images.ImageService;
 // import com.gaboot.services.files.MinIoFileService;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 // import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PostConstruct;
@@ -72,34 +74,49 @@ public class ProductService extends ProductsServiceImplBase {
 
     @Override
     public void findAll(Empty request, StreamObserver<Products> responseObserver) {
-        final List<Product> products = productRepo.findAll().stream().map(prodMap::toGRPC).toList();
-        Products prods = Products.newBuilder().addAllProducts(products).build();
-        responseObserver.onNext(prods);
-        responseObserver.onCompleted();
+        try {
+            final List<Product> products = productRepo.findAll().stream().map(prodMap::toGRPC).toList();
+            Products prods = Products.newBuilder().addAllProducts(products).build();
+            responseObserver.onNext(prods);
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(Status.INTERNAL.withDescription("Unexpected error").asRuntimeException());
+        }
     }
 
     @Override
     public void findOne(Int64Value request, StreamObserver<Product> responseObserver) {
-        final Product data = prodMap.toGRPC(productRepo.findById((long) request.getValue()).orElseThrow(() -> new RuntimeException("Product not found")));
-        responseObserver.onNext(data);
-        responseObserver.onCompleted();
+        try {
+            final Product data = prodMap.toGRPC(productRepo.findById((long) request.getValue()).orElseThrow(() -> new GrpcResourceNotFoundException("Product not found")));
+            responseObserver.onNext(data);
+            responseObserver.onCompleted();
+        } catch (GrpcResourceNotFoundException e) {
+            responseObserver.onError(Status.NOT_FOUND.withDescription(e.getMessage()).asRuntimeException());
+        } catch (Exception e) {
+            responseObserver.onError(Status.INTERNAL.withDescription("Unexpected error").asRuntimeException());
+        }
     }
 
     @Override
     public void findPaginate(FilterProduct request, StreamObserver<PagingProduct> responseObserver) {
-        final int page = request.getPaging().getPage()-1;
-        final int pageSize = request.getPaging().getDataPerPage();
 
-        final String name = request.getName();
-        final String sku = request.getSku();
+        try {
+            final int page = request.getPaging().getPage()-1;
+            final int pageSize = request.getPaging().getDataPerPage();
 
-        Specification<ProductEntity> spec = productSpec.filterByNameAndSku(name, sku);
-        Page<ProductEntity> productPages = productRepo.findAll(spec, PageRequest.of(page, pageSize));
-        List<Product> grpcProducts = productPages.getContent().stream().map(prodMap::toGRPC).toList();
-        PagingProduct paging = PagingProduct.newBuilder().addAllProducts(grpcProducts).setLastPage(productPages.getTotalPages()).build();
+            final String name = request.getName();
+            final String sku = request.getSku();
 
-        responseObserver.onNext(paging);
-        responseObserver.onCompleted();
+            Specification<ProductEntity> spec = productSpec.filterByNameAndSku(name, sku);
+            Page<ProductEntity> productPages = productRepo.findAll(spec, PageRequest.of(page, pageSize));
+            List<Product> grpcProducts = productPages.getContent().stream().map(prodMap::toGRPC).toList();
+            PagingProduct paging = PagingProduct.newBuilder().addAllProducts(grpcProducts).setLastPage(productPages.getTotalPages()).build();
+
+            responseObserver.onNext(paging);
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(Status.INTERNAL.withDescription("Unexpected error").asRuntimeException());
+        }
     }
 
     @Override
@@ -121,7 +138,7 @@ public class ProductService extends ProductsServiceImplBase {
             responseObserver.onNext(product);
             responseObserver.onCompleted();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            responseObserver.onError(Status.INTERNAL.withDescription("Unexpected error").asRuntimeException());
         }
     }
 
@@ -148,7 +165,7 @@ public class ProductService extends ProductsServiceImplBase {
             responseObserver.onNext(product);
             responseObserver.onCompleted();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            responseObserver.onError(Status.INTERNAL.withDescription("Unexpected error").asRuntimeException());
         }
     }
 }

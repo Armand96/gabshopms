@@ -1,6 +1,7 @@
 package com.gaboot.gabshop.api.gateway.product;
 
 import com.gaboot.gabshop.api.gateway.common.dto.ResponseDto;
+import com.gaboot.gabshop.api.gateway.common.exception.MapException;
 import com.gaboot.gabshop.api.gateway.common.services.MappingService;
 import com.gaboot.gabshop.api.gateway.product.dto.CreateProductDto;
 import com.gaboot.gabshop.api.gateway.product.dto.FilterProductDto;
@@ -14,6 +15,7 @@ import com.gaboot.gabshop.grpc.product.ProductsServiceGrpc.ProductsServiceBlocki
 import com.gaboot.gabshop.grpc.product.UpdateProduct;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
+import io.grpc.StatusRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -23,6 +25,8 @@ import java.util.List;
 
 @Service
 public class ProductService {
+
+    private MapException mapException = new MapException();
 
     @GrpcClient("productService")
     private ProductsServiceBlockingStub productStub;
@@ -42,11 +46,15 @@ public class ProductService {
     }
 
     public ResponseDto<ProductDto> findOne(long id) {
-        final Int64Value request = Int64Value.newBuilder().setValue(id).build();
-        final ProductDto product = mapper.toDto(productStub.findOne(request));
-        final ResponseDto<ProductDto> respDto = new ResponseDto<>();
-        mapServ.mapResponseSuccess(respDto, product, "");
-        return respDto;
+        try {
+            final Int64Value request = Int64Value.newBuilder().setValue(id).build();
+            final ProductDto product = mapper.toDto(productStub.findOne(request));
+            final ResponseDto<ProductDto> respDto = new ResponseDto<>();
+            mapServ.mapResponseSuccess(respDto, product, "");
+            return respDto;
+        } catch (StatusRuntimeException e) {
+            throw mapException.mapGrpcException(e);
+        }
     }
 
     public ResponseDto<ProductDto> paginate(FilterProductDto filter) {
@@ -72,10 +80,14 @@ public class ProductService {
     }
 
     public ResponseDto<ProductDto> update(UpdateProductDto productDto, MultipartFile file) {
-        final UpdateProduct req = mapper.toUpdateProductGRPC(productDto, file);
-        final ProductDto product = mapper.toDto(productStub.update(req));
-        final ResponseDto<ProductDto> respDto = new ResponseDto<>();
-        mapServ.mapResponseSuccess(respDto, product, "");
-        return respDto;
+        try {
+            final UpdateProduct req = mapper.toUpdateProductGRPC(productDto, file);
+            final ProductDto product = mapper.toDto(productStub.update(req));
+            final ResponseDto<ProductDto> respDto = new ResponseDto<>();
+            mapServ.mapResponseSuccess(respDto, product, "");
+            return respDto;
+        } catch (StatusRuntimeException e) {
+            throw mapException.mapGrpcException(e);
+        }
     }
 }
