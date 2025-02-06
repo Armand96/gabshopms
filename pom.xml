@@ -13,6 +13,7 @@
         <module>gabshop.files</module>
         <module>gabshop.product</module>
         <module>gabshop.api.gateway</module>
+        <module>gabshop.user</module>
     </modules>
 
     <properties>

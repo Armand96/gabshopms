@@ -17,3 +17,6 @@ grpc:
     productService:
       address: localhost:9091
       negotiation-type: plaintext
+    userService:
+      address: localhost:9092
+      negotiation-type: plaintext

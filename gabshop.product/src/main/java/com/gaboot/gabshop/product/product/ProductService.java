@@ -152,7 +152,7 @@ public class ProductService extends ProductsServiceImplBase {
                 defaultImageThumbPath = imgSvc.uploadImageThumb(request.getProduct().getImageContent(), request.getProduct().getFileName(), "products/img/thumb/");
             }
 
-            ProductEntity productEntity = productRepo.findById(request.getId()).orElseThrow(() -> new RuntimeException("Product not found"));
+            ProductEntity productEntity = productRepo.findById(request.getId()).orElseThrow(() -> new GrpcResourceNotFoundException("Product not found"));
             productEntity = prodMap.toEntity(request.getProduct());
             productEntity.setId(request.getId());
             if(!defaultImagePath.isEmpty() || !defaultImageThumbPath.isEmpty()) {
@@ -164,6 +164,8 @@ public class ProductService extends ProductsServiceImplBase {
             Product product = prodMap.toGRPC(productEntity);
             responseObserver.onNext(product);
             responseObserver.onCompleted();
+        } catch (GrpcResourceNotFoundException e) {
+            responseObserver.onError(Status.NOT_FOUND.withDescription(e.getMessage()).asRuntimeException());
         } catch (IOException e) {
             responseObserver.onError(Status.INTERNAL.withDescription("Unexpected error").asRuntimeException());
         }

@@ -1,13 +1,11 @@
 package com.gaboot.gabshop.api.gateway.product.dto;
 
 import lombok.Data;
-import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
 
 @Data
-@ToString
 @Accessors(chain = true)
 public class ProductDto {
     private long id;

@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.gaboot.gabshop.grpc.user";
+option java_outer_classname = "UserProto";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+import "general/pagination.proto";
+
+enum Gender {
+  MALE = 0;
+  FEMALE = 1;
+}
+
+enum UserStatus {
+  REGISTERED = 0;
+  ACTIVATED = 1;
+  BANNED = 2;
+  INACTIVE = 3;
+}
+
+message User {
+  int64 id = 1;
+  string email = 2;
+  string firstname = 3;
+  string lastname = 4;
+  string password = 5;
+  Gender gender = 6;
+  UserStatus status = 7;
+  string image = 8;
+  string image_thumb = 9;
+  int64 created_at = 10;
+  int64 updated_at = 11;
+}
+
+message CreateUser {
+  string email = 1;
+  string firstname = 2;
+  string lastname = 3;
+  string password = 4;
+  Gender gender = 5;
+  bytes image_content = 6;
+  string image_type = 7;
+  string image_name = 8;
+}
+
+message UpdateUser {
+  int64 id = 1;
+  CreateUser user = 2;
+}
+
+service UsersService {
+  rpc RegisterUser(CreateUser) returns (User);
+  rpc ActivateUser(google.protobuf.Int64Value) returns (User);
+  rpc CurrentUser(google.protobuf.Int64Value) returns (User);
+  rpc UpdateCurrentUser(UpdateUser) returns (User);
+  rpc DeactivateUser(google.protobuf.Int64Value) returns (User);
+}

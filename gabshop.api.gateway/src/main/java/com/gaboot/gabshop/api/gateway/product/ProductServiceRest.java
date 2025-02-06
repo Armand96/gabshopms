@@ -24,9 +24,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Service
-public class ProductService {
+public class ProductServiceRest {
 
-    private MapException mapException = new MapException();
+    private final MapException mapException = new MapException();
 
     @GrpcClient("productService")
     private ProductsServiceBlockingStub productStub;
