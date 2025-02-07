@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class UserServiceRest {
+public class UserServiceRest implements UserServiceInterfaceRest {
 
     private final MapException mapException = new MapException();
 
@@ -30,6 +30,7 @@ public class UserServiceRest {
     @Autowired
     private MappingService<UserDto> mapServ;
 
+    @Override
     public ResponseDto<UserDto> currentUser(long id) {
         try {
             final Int64Value request = Int64Value.newBuilder().setValue(id).build();
@@ -42,6 +43,7 @@ public class UserServiceRest {
         }
     }
 
+    @Override
     public ResponseDto<UserDto> activateUSer(long id) {
         try {
             final Int64Value request = Int64Value.newBuilder().setValue(id).build();
@@ -54,6 +56,7 @@ public class UserServiceRest {
         }
     }
 
+    @Override
     public ResponseDto<UserDto> deactivateUser(long id) {
         try {
             final Int64Value request = Int64Value.newBuilder().setValue(id).build();
@@ -66,6 +69,7 @@ public class UserServiceRest {
         }
     }
 
+    @Override
     public ResponseDto<UserDto> registerUser(CreateUserDto createUserDto, MultipartFile file) {
         try {
             final CreateUser req = mapper.toCreateUserGRPC(createUserDto, file);
@@ -78,6 +82,7 @@ public class UserServiceRest {
         }
     }
 
+    @Override
     public ResponseDto<UserDto> updateUser(UpdateUserDto updateUserDto, MultipartFile file) {
         try {
             final UpdateUser req = mapper.toUpdateUserGRPC(updateUserDto, file);

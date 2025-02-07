@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Service
-public class ProductServiceRest {
+public class ProductServiceRest implements ProductServiceInterfaceRest {
 
     private final MapException mapException = new MapException();
 
@@ -37,6 +37,7 @@ public class ProductServiceRest {
     @Autowired
     private MappingService<ProductDto> mapServ;
 
+    @Override
     public ResponseDto<ProductDto> findAll(){
         final Empty request = Empty.newBuilder().build();
         final List<ProductDto> result = productStub.findAll(request).getProductsList().stream().map(mapper::toDto).toList();
@@ -45,6 +46,7 @@ public class ProductServiceRest {
         return respDto;
     }
 
+    @Override
     public ResponseDto<ProductDto> findOne(long id) {
         try {
             final Int64Value request = Int64Value.newBuilder().setValue(id).build();
@@ -57,6 +59,7 @@ public class ProductServiceRest {
         }
     }
 
+    @Override
     public ResponseDto<ProductDto> paginate(FilterProductDto filter) {
         final FilterProduct req = FilterProduct.newBuilder()
                 .setPaging(
@@ -71,6 +74,7 @@ public class ProductServiceRest {
         return respDto;
     }
 
+    @Override
     public ResponseDto<ProductDto> create(CreateProductDto productDto, MultipartFile file) {
         final CreateProduct req = mapper.toCreateProductGRPC(productDto, file);
         final ProductDto product = mapper.toDto(productStub.create(req));
@@ -79,6 +83,7 @@ public class ProductServiceRest {
         return respDto;
     }
 
+    @Override
     public ResponseDto<ProductDto> update(UpdateProductDto productDto, MultipartFile file) {
         try {
             final UpdateProduct req = mapper.toUpdateProductGRPC(productDto, file);

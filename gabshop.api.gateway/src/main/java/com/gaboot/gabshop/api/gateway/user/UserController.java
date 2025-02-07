@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     @Autowired
-    private UserServiceRest userServiceRest;
+    private UserServiceInterfaceRest userServiceRest;
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDto<UserDto>> currentUser(@PathVariable long id) {

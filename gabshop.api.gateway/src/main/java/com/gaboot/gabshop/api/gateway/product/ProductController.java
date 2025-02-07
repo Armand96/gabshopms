@@ -15,7 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProductController {
 
     @Autowired
-    private ProductServiceRest productServiceRest;
+    // private ProductServiceRest productServiceRest;
+    private ProductServiceInterfaceRest productServiceRest;
 
     @GetMapping()
     public ResponseEntity<ResponseDto<ProductDto>> findAll() {
